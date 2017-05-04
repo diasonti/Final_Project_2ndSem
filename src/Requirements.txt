@@ -1,0 +1,13 @@
+USE:
+1. Inheritance
+2. Encapsulation
+3. Polymorphism
+4. Abstract classes(methods)
+5. Interface
+6. Override
+7. Overload
+8. Multithreading
+9. Network
+10. File in/out
+11. GUI
+12. Collections
