@@ -1,14 +1,9 @@
-USE:
-1. Inheritance
-2. Encapsulation
-3. Polymorphism
-4. Abstract classes(methods)
-5. Interface
-6. Override
-7. Overload
-8. Multithreading
-9. Network
-10. File in/out
-11. GUI
-12. Collections
+1. Classes and Objects
+2. Inheritance
+3. Abstractions or Interface implementation
+4. Collections: ArrayList or other collection classes (up to you)
+5. Object Serialization: You have to store your data or settings into serialized file
+6. Threads: Use Threads for multiprocessing
+7. Networking: You have to implement threaded networking model
+8. GUI interface: Use GUI based interface
 
