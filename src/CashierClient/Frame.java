@@ -7,12 +7,14 @@ import javax.swing.*;
  */
 class Frame extends JFrame {
 
-    public Frame(){
+    Frame(){
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 600);
         setVisible(true);
 
+        //TODO Connection check (boolean: connected)
+        
     }
 
 }
