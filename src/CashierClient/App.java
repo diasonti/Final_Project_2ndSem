@@ -15,11 +15,13 @@ class App {
     private static ObjectOutputStream out;
     static boolean connected = false;
     
+    static Frame frame;
+    
     public static void main(String[] args){
         final String IP = "127.0.0.1";
         final int PORT = 2009;
         try {
-            Frame frame = new Frame();
+            frame = new Frame();
             /* //TODO Remove comment after gui completion
             socket = new Socket(IP, PORT);
             in = new ObjectInputStream(socket.getInputStream());
@@ -60,7 +62,26 @@ class App {
                 new Flight(new Aircraft("Airbus", "A231", 50, 150),
                         new City("Astana", "Kazakhstan", "UACC"),
                         new City("London Heathrow", "United Kingdom", "EGLL"),
-                        5000, 1000, 3000, "2.12.1998")}; //TODO Finding flights
+                        5000, 1000, 3000, "2.12.1998")}; //TODO Find flights
     }
 
+    static int buyTickets(Flight flight, boolean business, int amount){
+        return 0; // TODO Book tickets
+    }
+    
+    static Flight[] getAllFlights(){
+        return new Flight[]{new Flight(new Aircraft("Airbus", "A231", 50, 150),
+                new City("Astana", "Kazakhstan", "UACC"),
+                new City("London Heathrow", "United Kingdom", "EGLL"),
+                5000, 1000, 3000, "2.12.1998"),
+                new Flight(new Aircraft("Airbus", "A231", 50, 150),
+                        new City("Astana", "Kazakhstan", "UACC"),
+                        new City("London Heathrow", "United Kingdom", "EGLL"),
+                        5000, 1000, 3000, "2.12.1998"),
+                new Flight(new Aircraft("Airbus", "A231", 50, 150),
+                        new City("Astana", "Kazakhstan", "UACC"),
+                        new City("London Heathrow", "United Kingdom", "EGLL"),
+                        5000, 1000, 3000, "2.12.1998")}; //TODO Get all flights
+    }
+    
 }

@@ -1,8 +1,13 @@
 package CashierClient;
 
 import common.*;
+
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,7 +31,16 @@ class Frame extends JFrame {
 	private Flight[] foundFlights = new Flight[0];
 	private Object[][] foundFlightsTableData = new Object[0][0];
     private JButton buy, find, reset;
-    
+	
+	private Flight selectedFlight;
+    private boolean businessClass;
+    private int number;
+	
+    private String[] allFlightsHeader = {"Date", "From", "To", "Aircraft", "Business Price", "Economy Price", "Business available", "Economy available"};
+	private JScrollPane allFlightsTableContainer;
+	private JTable allFlights;
+    private JButton refreshTable;
+	
     Frame(){
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,6 +89,9 @@ class Frame extends JFrame {
         from = new JComboBox(cities.toArray());
         to = new JComboBox(cities.toArray());
         
+        from.addItemListener(new ItemChangeListener());
+        to.addItemListener(new ItemChangeListener());
+        
         from.setAction(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -114,7 +131,12 @@ class Frame extends JFrame {
         who.setBounds(horizontalIndent1 + horizontalIndent2 + passengers.getWidth() + 15, verticalIndent1 + verticalIndent2 * 2 - 17, textFieldWidth, textFieldHeight);
         
         //Found Flights Table
-        flights = new JTable(foundFlightsTableData, foundFlightsHeader);
+        flights = new JTable(foundFlightsTableData, foundFlightsHeader){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
         flights.setRowHeight(40);
         foundTableContainer = new JScrollPane(flights);
         foundTableContainer.setBounds(horizontalIndent1 - 17, verticalIndent1 + verticalIndent2 * 3, foundTableWidth, foundTableHeight);
@@ -150,14 +172,43 @@ class Frame extends JFrame {
 							foundFlightsTableData[i][1] = foundFlights[i].getBusinessPrice();
 							foundFlightsTableData[i][2] = foundFlights[i].getEconomyPrice();
 						}
-						flights = new JTable(foundFlightsTableData, foundFlightsHeader);
-						//flights.setCellSelectionEnabled(false);
+						flights = new JTable(foundFlightsTableData, foundFlightsHeader){
+							@Override
+							public boolean isCellEditable(int row, int column) {
+								return false;
+							}
+						};
+						flights.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 						flights.setColumnSelectionAllowed(false);
 						flights.setRowHeight(40);
+						
+						flights.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+							@Override
+							public void valueChanged(ListSelectionEvent e) {
+								selectedFlight = foundFlights[flights.getSelectedRow()];
+								businessClass = business.isSelected();
+								number = Integer.parseInt(who.getText());
+								System.out.println(flights.getSelectedRow() + " " + selectedFlight); // TODO REMOVE DEBUG
+								buy.setEnabled(true);
+							}
+						});
+						
 						foundTableContainer.setViewportView(flights);
 					}catch(NumberFormatException exception){
 						exception.printStackTrace();
 					}
+				}
+			}
+		});
+		buy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int response = App.buyTickets(selectedFlight, businessClass, number);
+				if(response == 0){
+					JOptionPane.showMessageDialog(App.frame, "Success");
+					resetFields();
+				}else{
+					JOptionPane.showMessageDialog(App.frame, "Error. Code:" + response);
 				}
 			}
 		});
@@ -180,6 +231,40 @@ class Frame extends JFrame {
         
         //Display all flights panel
         flightsList = new JPanel();
+        flightsList.setLayout(null);
+        allFlights = new JTable(new Object[0][8], allFlightsHeader){
+        	@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		allFlightsTableContainer = new JScrollPane(allFlights);
+		allFlightsTableContainer.setBounds(0, 0, getWidth(), getHeight() - 120);
+	
+		refreshTable = new JButton("Refresh table");
+		refreshTable.setBounds(getWidth()/2 - 100, getHeight() - 118, 200, 60);
+		refreshTable.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Flight[] allFlightsList = App.getAllFlights();
+				Object[][] tableData = new Object[allFlightsList.length][8];
+				for(int i = 0; i < allFlightsList.length; i++){
+					tableData[i][0] = allFlightsList[i].getDate();
+					tableData[i][1] = allFlightsList[i].getDeparture();
+					tableData[i][2] = allFlightsList[i].getArrival();
+					tableData[i][3] = allFlightsList[i].getAircraft();
+					tableData[i][4] = allFlightsList[i].getBusinessPrice();
+					tableData[i][5] = allFlightsList[i].getEconomyPrice();
+					tableData[i][6] = allFlightsList[i].getBusinessPlacesFree();
+					tableData[i][7] = allFlightsList[i].getEconomyPlacesFree();
+				}
+				allFlights = new JTable(tableData, allFlightsHeader);
+				allFlightsTableContainer.setViewportView(allFlights);
+			}
+		});
+		
+		flightsList.add(refreshTable);
+        flightsList.add(allFlightsTableContainer);
         
         tabs.addTab("Find flight", ticket);
         tabs.addTab("All flights", flightsList);
@@ -192,9 +277,34 @@ class Frame extends JFrame {
     	to.setSelectedIndex(0);
     	flightClass.clearSelection();
     	who.setText("");
-    	flights = new JTable(new Object[][]{}, foundFlightsHeader);
+    	flights = new JTable(new Object[][]{}, foundFlightsHeader){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		foundTableContainer.setViewportView(flights);
 		buy.setEnabled(false);
-		repaint();
+	}
+	
+	private class ItemChangeListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getStateChange() == ItemEvent.SELECTED) {
+				if(buy.isEnabled()) {
+					buy.setEnabled(false);
+				}
+				if(flights.getRowCount() > 0) {
+					flights = new JTable(new Object[][]{}, foundFlightsHeader){
+						@Override
+						public boolean isCellEditable(int row, int column) {
+							return false;
+						}
+					};
+					foundTableContainer.setViewportView(flights);
+				}
+			}
+		}
 	}
 
 }
