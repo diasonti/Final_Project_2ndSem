@@ -20,7 +20,7 @@ class Frame extends JFrame {
     private JPanel ticket, flightsList;
     
     private JLabel title, departure, arrival, classLabel, passengers;
-    private List<City> cities = new ArrayList<City>();
+    private City[] cities;
     private JComboBox from, to;
 	private ButtonGroup flightClass;
 	private JRadioButton economy, business;
@@ -82,12 +82,10 @@ class Frame extends JFrame {
         passengers.setBounds(horizontalIndent1 + horizontalIndent2, verticalIndent1 + verticalIndent2 * 2, 100, 15);
         
         //ComboBoxes
-		cities.add(null); //DEBUG //TODO Remove debug lines
-		cities.add(new City("Almaty", "Kazakhstan", "UAAA")); // DEBUG
-		cities.add(new City("Astana", "Kazakhstan", "UACC")); // DEBUG
-		cities.add(new City("London Heathrow", "United Kingdom", "EGLL")); // DEBUG
-        from = new JComboBox(cities.toArray());
-        to = new JComboBox(cities.toArray());
+		cities = App.getAllCities();
+        from = new JComboBox(cities);
+        to = new JComboBox(cities);
+		
         
         from.addItemListener(new ItemChangeListener());
         to.addItemListener(new ItemChangeListener());
@@ -96,7 +94,7 @@ class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(to.getSelectedIndex() == from.getSelectedIndex()){
-					to.setSelectedIndex(0);
+					to.setSelectedItem(null);
 				}
 			}
 		});
@@ -104,7 +102,7 @@ class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(to.getSelectedIndex() == from.getSelectedIndex()){
-					from.setSelectedIndex(0);
+					from.setSelectedItem(null);
 				}
 			}
 		});
@@ -188,7 +186,6 @@ class Frame extends JFrame {
 								selectedFlight = foundFlights[flights.getSelectedRow()];
 								businessClass = business.isSelected();
 								number = Integer.parseInt(who.getText());
-								System.out.println(flights.getSelectedRow() + " " + selectedFlight); // TODO REMOVE DEBUG
 								buy.setEnabled(true);
 							}
 						});
@@ -273,8 +270,17 @@ class Frame extends JFrame {
     }
     
     private void resetFields(){
-    	from.setSelectedIndex(0);
-    	to.setSelectedIndex(0);
+    	cities = App.getAllCities();
+    	from.removeAllItems();
+    	to.removeAllItems();
+    	from.addItem(null);
+    	to.addItem(null);
+    	for(City c : cities){
+    		from.addItem(c);
+    		to.addItem(c);
+		}
+    	//from.setSelectedIndex(0);
+    	//to.setSelectedIndex(0);
     	flightClass.clearSelection();
     	who.setText("");
     	flights = new JTable(new Object[][]{}, foundFlightsHeader){

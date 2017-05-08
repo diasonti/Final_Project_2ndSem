@@ -12,6 +12,9 @@ public class Packet implements Serializable {
 	public Packet(String action) {
 		this.header = action;
 	}
+	public Packet(Object[] content) {
+		this.content = content;
+	}
 	public Packet(String action, Object[] content) {
 		this.header = action;
 		this.content = content;

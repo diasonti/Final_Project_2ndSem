@@ -21,56 +21,94 @@ class App {
         final String IP = "127.0.0.1";
         final int PORT = 2009;
         try {
-            frame = new Frame();
-            /* //TODO Remove comment after gui completion
             socket = new Socket(IP, PORT);
+			out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-            int login = send(new Packet("login","cashier"));
+            int login = (int)send(new Packet("login","cashier")).getContent()[0];
             connected = login == 0;
-            */
+			frame = new Frame();
         }catch(Exception e){
             e.printStackTrace();
         }
     }
     
     // Send packet and wait for response
-    static int send(Packet packet){
-        if(packet == null || !connected)
-            return -1;
+    static Packet send(Packet packet){
+        if(packet == null)
+            return null;
         try{
             out.writeObject(packet);
             packet = (Packet)in.readObject();
-            if(packet.getHeader().equals("Response"))
-                return (int)packet.getContent()[0];
+			return packet;
         }catch(Exception e){
             e.printStackTrace();
-            return -1;
+            return null;
         }
-        return -1;
     }
     
     static Flight[] findFlights(City from, City to, boolean business, int passengers){
-        return new Flight[]{new Flight(new Aircraft("Airbus", "A231", 50, 150),
-                new City("Astana", "Kazakhstan", "UACC"),
-                new City("London Heathrow", "United Kingdom", "EGLL"),
-                5000, 1000, 3000, "2.12.1998"),
-                new Flight(new Aircraft("Airbus", "A231", 50, 150),
-                        new City("Astana", "Kazakhstan", "UACC"),
-                        new City("London Heathrow", "United Kingdom", "EGLL"),
-                        5000, 1000, 3000, "2.12.1998"),
-                new Flight(new Aircraft("Airbus", "A231", 50, 150),
-                        new City("Astana", "Kazakhstan", "UACC"),
-                        new City("London Heathrow", "United Kingdom", "EGLL"),
-                        5000, 1000, 3000, "2.12.1998")}; //TODO Find flights
+    	try {
+			Object[] content = {from, to, business, passengers}; // Flights finding packet
+			Packet query = new Packet("FilteredFlightsListRequest", content);
+			Packet response = send(query);
+			Flight[] flights = new Flight[response.getContent().length];
+			for(int i = 0; i < response.getContent().length; i++) {
+				flights[i] = (Flight) response.getContent()[i];
+			}
+			return flights;
+		}catch(Exception e){
+    		e.printStackTrace();
+    		return new Flight[0];
+		}
     }
 
     static int buyTickets(Flight flight, boolean business, int amount){
-        return 0; // TODO Book tickets
+		try {
+			Object[] content = {flight.getId(), business, amount}; // Flights booking packet
+			Packet query = new Packet("BookRequest", content);
+			Packet response = send(query);
+			return (int)response.getContent()[0];
+		}catch(Exception e){
+			e.printStackTrace();
+			return -1;
+		}
     }
     
     static Flight[] getAllFlights(){
-        return new Flight[]{new Flight(new Aircraft("Airbus", "A231", 50, 150),
+		try {
+			Packet query = new Packet("FlightsListRequest");// All flights getting packet
+			Packet response = send(query);
+			Flight[] flights = new Flight[response.getContent().length];
+			for(int i = 0; i < response.getContent().length; i++) {
+				flights[i] = (Flight) response.getContent()[i];
+			}
+			return flights;
+		}catch(Exception e){
+			e.printStackTrace();
+			return new Flight[0];
+		}
+    }
+	
+	static City[] getAllCities(){
+		try {
+			Packet query = new Packet("CitiesListRequest");// All cities getting packet
+			Packet response = send(query);
+			City[] cities = new City[response.getContent().length + 1];
+			cities[0] = null;
+			for(int i = 0; i < response.getContent().length; i++) {
+				cities[i + 1] = (City) response.getContent()[i];
+			}
+			return cities;
+		}catch(Exception e){
+			e.printStackTrace();
+			return new City[]{null};
+		}
+	}
+    
+}
+
+/*
+return new Flight[]{new Flight(new Aircraft("Airbus", "A231", 50, 150),
                 new City("Astana", "Kazakhstan", "UACC"),
                 new City("London Heathrow", "United Kingdom", "EGLL"),
                 5000, 1000, 3000, "2.12.1998"),
@@ -81,7 +119,5 @@ class App {
                 new Flight(new Aircraft("Airbus", "A231", 50, 150),
                         new City("Astana", "Kazakhstan", "UACC"),
                         new City("London Heathrow", "United Kingdom", "EGLL"),
-                        5000, 1000, 3000, "2.12.1998")}; //TODO Get all flights
-    }
-    
-}
+                        5000, 1000, 3000, "2.12.1998")};
+ */

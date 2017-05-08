@@ -8,6 +8,7 @@ import java.util.Date;
  */
 public class Flight implements Serializable {
 
+	private int id;
 	private Aircraft aircraft;
 	private City departure, arrival;
 	private int distance, economyPrice, businessPrice;
@@ -26,6 +27,14 @@ public class Flight implements Serializable {
 		this.date = date;
 		this.economyPlacesFree = aircraft.getEconomy();
 		this.businessPlacesFree = aircraft.getBusiness();
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public Aircraft getAircraft() {
