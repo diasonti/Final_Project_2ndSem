@@ -1,20 +1,22 @@
 package common;
 
+import java.io.Serializable;
+
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44.
  */
-public class Aircraft {
+public class Aircraft implements Serializable {
 	
 	private String name, model;
-	private int business, econom;
+	private int business, economy;
 	
 	
 	public Aircraft() {}
-	public Aircraft(String name, String model, int business, int econom) {
+	public Aircraft(String name, String model, int business, int economy) {
 		this.name = name;
 		this.model = model;
 		this.business = business;
-		this.econom = econom;
+		this.economy = economy;
 	}
 	
 	public String getName() {
@@ -41,11 +43,16 @@ public class Aircraft {
 		this.business = business;
 	}
 	
-	public int getEconom() {
-		return econom;
+	public int getEconomy() {
+		return economy;
 	}
 	
-	public void setEconom(int econom) {
-		this.econom = econom;
+	public void setEconomy(int economy) {
+		this.economy = economy;
+	}
+	
+	@Override
+	public String toString() {
+		return name + " " + model;
 	}
 }

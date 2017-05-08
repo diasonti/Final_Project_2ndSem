@@ -1,11 +1,12 @@
 package common;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44.
  */
-public class Ticket {
+public class Ticket implements Serializable {
 	
 	private String name, surname, passportNo;
 	private Date departure;

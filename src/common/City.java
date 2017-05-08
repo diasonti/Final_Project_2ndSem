@@ -1,9 +1,11 @@
 package common;
 
+import java.io.Serializable;
+
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44.
  */
-public class City {
+public class City implements Serializable {
 	
 	private String name, country, code;
 	
@@ -35,5 +37,10 @@ public class City {
 	
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	@Override
+	public String toString() {
+		return name + ", " + country + " (" + code + ")";
 	}
 }

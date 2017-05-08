@@ -1,23 +1,31 @@
 package common;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44 : 01:44.
  */
-public class Flight {
+public class Flight implements Serializable {
 
 	private Aircraft aircraft;
 	private City departure, arrival;
-	private int distance, economPrice, businessPrice;
+	private int distance, economyPrice, businessPrice;
+	private int economyPlacesFree, businessPlacesFree;
+	private String date;
 	
 	public Flight() {}
 	
-	public Flight(Aircraft aircraft, City departure, City arrival, int distance, int economPrice, int businessPrice) {
+	public Flight(Aircraft aircraft, City departure, City arrival, int distance, int economyPrice, int businessPrice, String date) {
 		this.aircraft = aircraft;
 		this.departure = departure;
 		this.arrival = arrival;
 		this.distance = distance;
-		this.economPrice = economPrice;
+		this.economyPrice = economyPrice;
 		this.businessPrice = businessPrice;
+		this.date = date;
+		this.economyPlacesFree = aircraft.getEconomy();
+		this.businessPlacesFree = aircraft.getBusiness();
 	}
 	
 	public Aircraft getAircraft() {
@@ -52,12 +60,12 @@ public class Flight {
 		this.distance = distance;
 	}
 	
-	public int getEconomPrice() {
-		return economPrice;
+	public int getEconomyPrice() {
+		return economyPrice;
 	}
 	
-	public void setEconomPrice(int economPrice) {
-		this.economPrice = economPrice;
+	public void setEconomyPrice(int economyPrice) {
+		this.economyPrice = economyPrice;
 	}
 	
 	public int getBusinessPrice() {
@@ -66,5 +74,29 @@ public class Flight {
 	
 	public void setBusinessPrice(int businessPrice) {
 		this.businessPrice = businessPrice;
+	}
+	
+	public int getEconomyPlacesFree() {
+		return economyPlacesFree;
+	}
+	
+	public void setEconomyPlacesFree(int economyPlacesFree) {
+		this.economyPlacesFree = economyPlacesFree;
+	}
+	
+	public int getBusinessPlacesFree() {
+		return businessPlacesFree;
+	}
+	
+	public void setBusinessPlacesFree(int businessPlacesFree) {
+		this.businessPlacesFree = businessPlacesFree;
+	}
+	
+	public String getDate() {
+		return date;
+	}
+	
+	public void setDate(String date) {
+		this.date = date;
 	}
 }
