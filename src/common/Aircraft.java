@@ -8,15 +8,15 @@ import java.io.Serializable;
 public class Aircraft implements Serializable {
 	
 	private String name, model;
-	private int business, economy;
+	private int businessSeats, economySeats;
 	
 	
 	public Aircraft() {}
-	public Aircraft(String name, String model, int business, int economy) {
+	public Aircraft(String name, String model, int businessSeats, int economySeats) {
 		this.name = name;
 		this.model = model;
-		this.business = business;
-		this.economy = economy;
+		this.businessSeats = businessSeats;
+		this.economySeats = economySeats;
 	}
 	
 	public String getName() {
@@ -35,20 +35,20 @@ public class Aircraft implements Serializable {
 		this.model = model;
 	}
 	
-	public int getBusiness() {
-		return business;
+	public int getBusinessSeats() {
+		return businessSeats;
 	}
 	
-	public void setBusiness(int business) {
-		this.business = business;
+	public void setBusinessSeats(int businessSeats) {
+		this.businessSeats = businessSeats;
 	}
 	
-	public int getEconomy() {
-		return economy;
+	public int getEconomySeats() {
+		return economySeats;
 	}
 	
-	public void setEconomy(int economy) {
-		this.economy = economy;
+	public void setEconomySeats(int economySeats) {
+		this.economySeats = economySeats;
 	}
 	
 	@Override

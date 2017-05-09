@@ -62,7 +62,7 @@ class App {
 		}
     }
 
-    static int buyTickets(Flight flight, boolean business, int amount){
+    static int buyTickets(Flight flight, boolean business, int amount){ //TODO NAME SURNAME PASSPORT NO
 		try {
 			Object[] content = {flight.getId(), business, amount}; // Flights booking packet
 			Packet query = new Packet("BookRequest", content);

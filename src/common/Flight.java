@@ -1,7 +1,6 @@
 package common;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44 : 01:44.
@@ -25,8 +24,8 @@ public class Flight implements Serializable {
 		this.economyPrice = economyPrice;
 		this.businessPrice = businessPrice;
 		this.date = date;
-		this.economyPlacesFree = aircraft.getEconomy();
-		this.businessPlacesFree = aircraft.getBusiness();
+		this.economyPlacesFree = aircraft.getEconomySeats();
+		this.businessPlacesFree = aircraft.getBusinessSeats();
 	}
 	
 	public int getId() {

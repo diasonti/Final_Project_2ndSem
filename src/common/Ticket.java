@@ -9,16 +9,16 @@ import java.util.Date;
 public class Ticket implements Serializable {
 	
 	private String name, surname, passportNo;
-	private Date departure;
+	private boolean business;
 	private Flight flight;
 	
 	public Ticket() {}
 	
-	public Ticket(String name, String surname, String passportNo, Date departure, Flight flight) {
+	public Ticket(String name, String surname, String passportNo, boolean business, Flight flight) {
 		this.name = name;
 		this.surname = surname;
 		this.passportNo = passportNo;
-		this.departure = departure;
+		this.business = business;
 		this.flight = flight;
 	}
 	
@@ -44,14 +44,6 @@ public class Ticket implements Serializable {
 	
 	public void setPassportNo(String passportNo) {
 		this.passportNo = passportNo;
-	}
-	
-	public Date getDeparture() {
-		return departure;
-	}
-	
-	public void setDeparture(Date departure) {
-		this.departure = departure;
 	}
 	
 	public Flight getFlight() {
