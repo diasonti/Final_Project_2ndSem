@@ -10,7 +10,8 @@ public class Flight implements Serializable {
 	private int id;
 	private Aircraft aircraft;
 	private City departure, arrival;
-	private int distance, economyPrice, businessPrice;
+	private int economyPrice;
+	private int businessPrice;
 	private int economyPlacesFree, businessPlacesFree;
 	private String date;
 	
@@ -20,7 +21,6 @@ public class Flight implements Serializable {
 		this.aircraft = aircraft;
 		this.departure = departure;
 		this.arrival = arrival;
-		this.distance = distance;
 		this.economyPrice = economyPrice;
 		this.businessPrice = businessPrice;
 		this.date = date;
@@ -58,14 +58,6 @@ public class Flight implements Serializable {
 	
 	public void setArrival(City arrival) {
 		this.arrival = arrival;
-	}
-	
-	public int getDistance() {
-		return distance;
-	}
-	
-	public void setDistance(int distance) {
-		this.distance = distance;
 	}
 	
 	public int getEconomyPrice() {

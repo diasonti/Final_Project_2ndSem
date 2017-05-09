@@ -6,11 +6,13 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:54.
  */
-public class ClientThread extends Thread {
+class ClientThread extends Thread {
 	
 	private Socket socket;
 	private ObjectInputStream in;
@@ -84,7 +86,29 @@ public class ClientThread extends Thread {
 			if(query == null)
 				continue;
 			if(query.getHeader().equals("FilteredFlightsListRequest")) {
-				//TODO Filter and send flights
+				//{from(City), to(City), business(boolean), passengers(int)}
+				
+				City from = (City)query.getContent()[0];
+				City to = (City)query.getContent()[1];
+				boolean business = (boolean)query.getContent()[2];
+				int count = (int)query.getContent()[3];
+				
+				load();
+				List<Flight> flights = db.getFlights();
+				ArrayList<Flight> match = new ArrayList<>();
+				for(Flight flight : flights){
+					if(flight.getDeparture().equals(from) && flight.getArrival().equals(to)){
+						if(business){
+							if(flight.getBusinessPlacesFree() >= count)
+								match.add(flight);
+						}else{
+							if(flight.getEconomyPlacesFree() >= count)
+								match.add(flight);
+						}
+					}
+				}
+				send(new Packet(match.toArray()));
+				/*
 				send(new Packet(new Flight[]{new Flight(new Aircraft("Airbus", "A231", 50, 150),
 						new City("Astana", "Kazakhstan", "UACC"),
 						new City("London Heathrow", "United Kingdom", "EGLL"),
@@ -97,8 +121,11 @@ public class ClientThread extends Thread {
 								new City("Astana", "Kazakhstan", "UACC"),
 								new City("London Heathrow", "United Kingdom", "EGLL"),
 								5000, 1000, 3000, "2.12.1998")}));
+				*/
 			} else if(query.getHeader().equals("FlightsListRequest")) {
-				//TODO Send all flights
+				load();
+				send(new Packet(db.getFlights().toArray()));
+				/*
 				send(new Packet("", new Flight[]{new Flight(new Aircraft("Airbus", "A231", 50, 150),
 						new City("Astana", "Kazakhstan", "UACC"),
 						new City("London Heathrow", "United Kingdom", "EGLL"),
@@ -111,12 +138,36 @@ public class ClientThread extends Thread {
 								new City("Astana", "Kazakhstan", "UACC"),
 								new City("London Heathrow", "United Kingdom", "EGLL"),
 								5000, 1000, 3000, "2.12.1998")}));
+				*/
 			} else if(query.getHeader().equals("BookRequest")) {
-				//TODO Book flight and send reply code
-				//
+				//(name[String], surname[String], pass[String], selectedFlight(int id), businessClass(boolean))
+				load();
+				String[] name = (String[])query.getContent()[0];
+				String[] surname = (String[])query.getContent()[1];
+				String[] pass = (String[])query.getContent()[2];
+				Flight flight = db.getFlightById((int)query.getContent()[3]);
+				boolean business = (boolean)query.getContent()[4];
+				if(flight == null) {
+					respond(404);
+					continue;
+				}
+				if(business){
+					if(flight.getBusinessPlacesFree() < name.length){
+						respond(-1);
+						continue;
+					}
+				}else{
+					if(flight.getEconomyPlacesFree() < name.length){
+						respond(-1);
+						continue;
+					}
+				}
+				for(int i = 0; i < name.length; i++){
+					db.addTicket(name[i], surname[i], pass[i], business, flight);
+				}
+				save();
 				respond(0);
 			} else if(query.getHeader().equals("CitiesListRequest")) {
-				//TODO Send all cities' list
 				load();
 				send(new Packet(db.getCities().toArray()));
 				/*
@@ -145,6 +196,7 @@ public class ClientThread extends Thread {
 			in.close();
 		}catch(Exception e){
 			db = new Database();
+			save();
 			System.out.println("Database reading error. New database created");
 		}
 	}

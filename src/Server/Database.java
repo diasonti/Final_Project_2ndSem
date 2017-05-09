@@ -40,6 +40,15 @@ class Database implements Serializable {
 		return tickets;
 	}
 	
+	public Flight getFlightById(int id){
+		for(Flight f : flights){
+			if(f.getId() == id){
+				return f;
+			}
+		}
+		return null;
+	}
+	
 	public Aircraft addAircraft(String name, String model, int businessSeats, int economySeats) {
 		aircrafts.add(new Aircraft(name, model, businessSeats, economySeats));
 		return aircrafts.get(aircrafts.size() - 1);

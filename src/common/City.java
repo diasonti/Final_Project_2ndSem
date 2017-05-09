@@ -43,4 +43,10 @@ public class City implements Serializable {
 	public String toString() {
 		return name + ", " + country + " (" + code + ")";
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof City)
+			return code.equals(((City)obj).getCode());
+		return false;
+	}
 }

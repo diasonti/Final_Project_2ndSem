@@ -4,7 +4,6 @@ import common.*;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -30,7 +29,7 @@ class Frame extends JFrame {
 	private String[] foundFlightsHeader = {"Aircraft", "Business price", "Economy price"};
 	private Flight[] foundFlights = new Flight[0];
 	private Object[][] foundFlightsTableData = new Object[0][0];
-    private JButton buy, find, reset;
+    private JButton book, find, reset;
 	
 	private Flight selectedFlight;
     private boolean businessClass;
@@ -141,12 +140,12 @@ class Frame extends JFrame {
         
         
         //Buttons
-		buy = new JButton("Buy tickets");
-		buy.setEnabled(false);
+		book = new JButton("Book tickets");
+		book.setEnabled(false);
 		reset = new JButton("Reset");
 		find = new JButton("Find flights");
 	
-		buy.setBounds(horizontalIndent1 + 500, verticalIndent1 + verticalIndent2 * 10, textFieldWidth, textFieldHeight);
+		book.setBounds(horizontalIndent1 + 500, verticalIndent1 + verticalIndent2 * 10, textFieldWidth, textFieldHeight);
 		reset.setBounds(horizontalIndent1, verticalIndent1 + verticalIndent2 * 10, textFieldWidth, textFieldHeight);
 		find.setBounds(horizontalIndent1 + reset.getWidth() + 20, verticalIndent1 + verticalIndent2 * 10, textFieldWidth, textFieldHeight);
   
@@ -186,7 +185,7 @@ class Frame extends JFrame {
 								selectedFlight = foundFlights[flights.getSelectedRow()];
 								businessClass = business.isSelected();
 								number = Integer.parseInt(who.getText());
-								buy.setEnabled(true);
+								book.setEnabled(true);
 							}
 						});
 						
@@ -197,10 +196,30 @@ class Frame extends JFrame {
 				}
 			}
 		});
-		buy.addActionListener(new ActionListener() {
+		book.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int response = App.buyTickets(selectedFlight, businessClass, number);
+				int response = 1;
+				String[] name = new String[number];
+				String[] surname = new String[number];
+				String[] pass = new String[number];
+				PassengerDataFrame dataInput = new PassengerDataFrame();
+				for(int i = 0; i < number; i++){
+					dataInput.setCount(i + 1);
+					while(true){
+						if(dataInput.ready == -1){
+							break;
+						}else if(dataInput.ready == 1){
+							name[i] = dataInput.getPassengersName();
+							surname[i] = dataInput.getPassengersSurname();
+							pass[i] = dataInput.getPassengersPassNo();
+							dataInput.reset();
+						}
+					}
+				}
+				if(dataInput.ready == 0) {
+					response = App.buyTickets(name, surname, pass, selectedFlight, businessClass);
+				}
 				if(response == 0){
 					JOptionPane.showMessageDialog(App.frame, "Success");
 					resetFields();
@@ -221,7 +240,7 @@ class Frame extends JFrame {
         ticket.add(business);
         ticket.add(who);
         ticket.add(foundTableContainer);
-        ticket.add(buy);
+        ticket.add(book);
         ticket.add(reset);
         ticket.add(find);
         
@@ -290,15 +309,15 @@ class Frame extends JFrame {
 			}
 		};
 		foundTableContainer.setViewportView(flights);
-		buy.setEnabled(false);
+		book.setEnabled(false);
 	}
 	
 	private class ItemChangeListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
-				if(buy.isEnabled()) {
-					buy.setEnabled(false);
+				if(book.isEnabled()) {
+					book.setEnabled(false);
 				}
 				if(flights.getRowCount() > 0) {
 					flights = new JTable(new Object[][]{}, foundFlightsHeader){
