@@ -21,13 +21,13 @@ class AdminApp {
 		final String IP = "127.0.0.1";
 		final int PORT = 2009;
 		try {
-			/* //TODO Remove comment upon gui completion
+			 //TODO Remove comment upon gui completion
 			socket = new Socket(IP, PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
-			int login = (int) send(new Packet("login", "Admin")).getContent()[0];
+			int login = (int) send(new Packet("login", "admin")).getContent()[0];
 			connected = login == 0;
-			*/
+			
 			frame = new Frame();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -67,10 +67,9 @@ class AdminApp {
 		try {
 			Packet query = new Packet("CitiesListRequest");// All cities getting packet
 			Packet response = send(query);
-			City[] cities = new City[response.getContent().length + 1];
-			cities[0] = null;
+			City[] cities = new City[response.getContent().length];
 			for(int i = 0; i < response.getContent().length; i++) {
-				cities[i + 1] = (City) response.getContent()[i];
+				cities[i] = (City) response.getContent()[i];
 			}
 			return cities;
 		} catch(Exception e) {
@@ -78,5 +77,52 @@ class AdminApp {
 			return new City[]{null};
 		}
 	}
+	
+	static Aircraft[] getAllAircraft(){
+		try {
+			Packet query = new Packet("AircraftListRequest");// All aircraft getting packet //TODO Server side
+			Packet response = send(query);
+			Aircraft[] aircraft = new Aircraft[response.getContent().length];
+			for(int i = 0; i < response.getContent().length; i++) {
+				aircraft[i] = (Aircraft) response.getContent()[i];
+			}
+			return aircraft;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new Aircraft[]{null};
+		}
+	}
+	
+	static Ticket[] getAllTickets(){
+		try {
+			Packet query = new Packet("TicketsListRequest");// All tickets getting packet //TODO Server side
+			Packet response = send(query);
+			Ticket[] tickets = new Ticket[response.getContent().length];
+			for(int i = 0; i < response.getContent().length; i++) {
+				tickets[i] = (Ticket) response.getContent()[i];
+			}
+			return tickets;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new Ticket[]{null};
+		}
+	}
+	
+	static void newAircraft(String name, String model, int bs, int es){
+		try {
+			Object[] content = new Object[5];
+			content[0] = "newAircraft";
+			content[1] = name;
+			content[2] = model;
+			content[3] = bs;
+			content[4] = es;
+			Packet query = new Packet("edit", content);
+			send(query);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 }

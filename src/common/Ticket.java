@@ -53,4 +53,8 @@ public class Ticket implements Serializable {
 	public void setFlight(Flight flight) {
 		this.flight = flight;
 	}
+	
+	public String getClassToString(){
+		return business ? "Business" : "Economy";
+	}
 }
