@@ -17,6 +17,7 @@ class Frame extends JFrame {
 	private Table aircraftsTable, citiesTable, flightsTable, ticketsTable;
 	private JButton refresh1, refresh2, refresh3, refresh4;
 	private JButton edit1, edit2, edit3, edit4;
+	private JButton save1, save2, save3, save4;
 	private JButton add1, add2, add3, add4;
 	
 	Frame(){
@@ -44,16 +45,8 @@ class Frame extends JFrame {
 		refresh1.setBounds(horizontalIndent1, verticalIndent, 250,60);
 		refresh1.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				Aircraft[] aircraftList = AdminApp.getAllAircraft();
-				Object[][] tableData = new Object[aircraftList.length][4];
-				for(int i = 0; i < aircraftList.length; i++){
-					tableData[i][0] = aircraftList[i].getName();
-					tableData[i][1] = aircraftList[i].getModel();
-					tableData[i][2] = aircraftList[i].getBusinessSeats();
-					tableData[i][3] = aircraftList[i].getEconomySeats();
-				}
-				aircraftsTable.setData(tableData);
+			public void actionPerformed(ActionEvent ae) {
+				refreshAircraft();
 			}
 		});
 		aircrafts.add(refresh1);
@@ -63,10 +56,27 @@ class Frame extends JFrame {
 		edit1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Table editing, saving changes
+				edit1.setVisible(false);
+				save1.setVisible(true);
+				aircraftsTable.setCellsEditable(true);
 			}
 		});
 		aircrafts.add(edit1);
+		
+		save1 = new JButton("Save");
+		save1.setVisible(false);
+		save1.setBounds(horizontalIndent1 + 350, verticalIndent, 250,60);
+		save1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save1.setVisible(false);
+				edit1.setVisible(true);
+				aircraftsTable.setCellsEditable(false);
+				
+				refreshAircraft();
+			}
+		});
+		aircrafts.add(save1);
 		
 		add1 = new JButton("Add");
 		add1.setBounds(horizontalIndent1 + 700, verticalIndent, 250,60);
@@ -90,14 +100,7 @@ class Frame extends JFrame {
 		refresh2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				City[] list = AdminApp.getAllCities();
-				Object[][] tableData = new Object[list.length][8];
-				for(int i = 0; i < list.length; i++){
-					tableData[i][0] = list[i].getName();
-					tableData[i][1] = list[i].getCountry();
-					tableData[i][2] = list[i].getCode();
-				}
-				aircraftsTable.setData(tableData);
+				refreshCities();
 			}
 		});
 		cities.add(refresh2);
@@ -111,6 +114,17 @@ class Frame extends JFrame {
 			}
 		});
 		cities.add(edit2);
+		
+		save2 = new JButton("Save");
+		save2.setVisible(false);
+		save2.setBounds(horizontalIndent1 + 350, verticalIndent, 250,60);
+		save2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO Table editing, saving changes
+			}
+		});
+		cities.add(save2);
 		
 		add2 = new JButton("Add");
 		add2.setBounds(horizontalIndent1 + 700, verticalIndent, 250,60);
@@ -135,19 +149,7 @@ class Frame extends JFrame {
 		refresh3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Flight[] allFlightsList = AdminApp.getAllFlights();
-				Object[][] tableData = new Object[allFlightsList.length][8];
-				for(int i = 0; i < allFlightsList.length; i++){
-					tableData[i][0] = allFlightsList[i].getDate();
-					tableData[i][1] = allFlightsList[i].getDeparture();
-					tableData[i][2] = allFlightsList[i].getArrival();
-					tableData[i][3] = allFlightsList[i].getAircraft();
-					tableData[i][4] = allFlightsList[i].getBusinessPrice();
-					tableData[i][5] = allFlightsList[i].getEconomyPrice();
-					tableData[i][6] = allFlightsList[i].getBusinessPlacesFree();
-					tableData[i][7] = allFlightsList[i].getEconomyPlacesFree();
-				}
-				flightsTable.setData(tableData);
+				refreshFlights();
 			}
 		});
 		flights.add(refresh3);
@@ -161,6 +163,17 @@ class Frame extends JFrame {
 			}
 		});
 		flights.add(edit3);
+		
+		save3 = new JButton("Save");
+		save3.setVisible(false);
+		save3.setBounds(horizontalIndent1 + 350, verticalIndent, 250,60);
+		save3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO Table editing, saving changes
+			}
+		});
+		flights.add(save3);
 		
 		add3 = new JButton("Add");
 		add3.setBounds(horizontalIndent1 + 700, verticalIndent, 250,60);
@@ -185,16 +198,7 @@ class Frame extends JFrame {
 		refresh4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Ticket[] list = AdminApp.getAllTickets();
-				Object[][] tableData = new Object[list.length][8];
-				for(int i = 0; i < list.length; i++){
-					tableData[i][0] = list[i].getName();
-					tableData[i][1] = list[i].getSurname();
-					tableData[i][2] = list[i].getPassportNo();
-					tableData[i][3] = list[i].getClassToString();
-					tableData[i][4] = list[i].getFlight();
-				}
-				aircraftsTable.setData(tableData);
+				refreshTickets();
 			}
 		});
 		tickets.add(refresh4);
@@ -208,6 +212,17 @@ class Frame extends JFrame {
 			}
 		});
 		tickets.add(edit4);
+		
+		save4 = new JButton("Save");
+		save4.setVisible(false);
+		save4.setBounds(horizontalIndent1 + 350, verticalIndent, 250,60);
+		save4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO Table editing, saving changes
+			}
+		});
+		tickets.add(save4);
 		
 		add4 = new JButton("Add");
 		add4.setBounds(horizontalIndent1 + 700, verticalIndent, 250,60);
@@ -230,6 +245,55 @@ class Frame extends JFrame {
 		
 		add(tabs);
 		setVisible(true);
+	}
+	
+	private void refreshAircraft(){
+		Aircraft[] aircraftList = AdminApp.getAllAircraft();
+		Object[][] tableData = new Object[aircraftList.length][4];
+		for(int i = 0; i < aircraftList.length; i++){
+			tableData[i][0] = aircraftList[i].getName();
+			tableData[i][1] = aircraftList[i].getModel();
+			tableData[i][2] = aircraftList[i].getBusinessSeats();
+			tableData[i][3] = aircraftList[i].getEconomySeats();
+		}
+		aircraftsTable.setData(tableData);
+	}
+	private void refreshFlights(){
+		Flight[] allFlightsList = AdminApp.getAllFlights();
+		Object[][] tableData = new Object[allFlightsList.length][8];
+		for(int i = 0; i < allFlightsList.length; i++){
+			tableData[i][0] = allFlightsList[i].getDate();
+			tableData[i][1] = allFlightsList[i].getDeparture();
+			tableData[i][2] = allFlightsList[i].getArrival();
+			tableData[i][3] = allFlightsList[i].getAircraft();
+			tableData[i][4] = allFlightsList[i].getBusinessPrice();
+			tableData[i][5] = allFlightsList[i].getEconomyPrice();
+			tableData[i][6] = allFlightsList[i].getBusinessPlacesFree();
+			tableData[i][7] = allFlightsList[i].getEconomyPlacesFree();
+		}
+		flightsTable.setData(tableData);
+	}
+	private void refreshCities(){
+		City[] list = AdminApp.getAllCities();
+		Object[][] tableData = new Object[list.length][8];
+		for(int i = 0; i < list.length; i++){
+			tableData[i][0] = list[i].getName();
+			tableData[i][1] = list[i].getCountry();
+			tableData[i][2] = list[i].getCode();
+		}
+		aircraftsTable.setData(tableData);
+	}
+	private void refreshTickets(){
+		Ticket[] list = AdminApp.getAllTickets();
+		Object[][] tableData = new Object[list.length][8];
+		for(int i = 0; i < list.length; i++){
+			tableData[i][0] = list[i].getName();
+			tableData[i][1] = list[i].getSurname();
+			tableData[i][2] = list[i].getPassportNo();
+			tableData[i][3] = list[i].getClassToString();
+			tableData[i][4] = list[i].getFlight();
+		}
+		aircraftsTable.setData(tableData);
 	}
 	
 	private class Tab extends JPanel{

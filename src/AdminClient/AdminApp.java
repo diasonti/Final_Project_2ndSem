@@ -80,7 +80,7 @@ class AdminApp {
 	
 	static Aircraft[] getAllAircraft(){
 		try {
-			Packet query = new Packet("AircraftListRequest");// All aircraft getting packet //TODO Server side
+			Packet query = new Packet("AircraftListRequest");// All aircraft getting packet
 			Packet response = send(query);
 			Aircraft[] aircraft = new Aircraft[response.getContent().length];
 			for(int i = 0; i < response.getContent().length; i++) {
@@ -95,7 +95,7 @@ class AdminApp {
 	
 	static Ticket[] getAllTickets(){
 		try {
-			Packet query = new Packet("TicketsListRequest");// All tickets getting packet //TODO Server side
+			Packet query = new Packet("TicketsListRequest");// All tickets getting packet
 			Packet response = send(query);
 			Ticket[] tickets = new Ticket[response.getContent().length];
 			for(int i = 0; i < response.getContent().length; i++) {
