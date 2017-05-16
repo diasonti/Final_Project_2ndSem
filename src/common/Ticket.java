@@ -6,8 +6,9 @@ import java.util.Date;
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44.
  */
-public class Ticket implements Serializable {
+public class Ticket extends Data implements Serializable {
 	
+	private int id;
 	private String name, surname, passportNo;
 	private boolean business;
 	private Flight flight;
@@ -20,6 +21,14 @@ public class Ticket implements Serializable {
 		this.passportNo = passportNo;
 		this.business = business;
 		this.flight = flight;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getName() {

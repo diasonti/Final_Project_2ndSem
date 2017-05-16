@@ -123,6 +123,16 @@ class AdminApp {
 		}
 	}
 	
+	static void editData(String dataType, Data[] edited){
+		try {
+			Object[] content = new Object[]{dataType, edited};
+			Packet query = new Packet("edit", content);
+			send(query);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 
 }

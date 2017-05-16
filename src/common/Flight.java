@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44 : 01:44.
  */
-public class Flight implements Serializable {
+public class Flight extends Data implements Serializable {
 
 	private int id;
 	private Aircraft aircraft;

@@ -12,6 +12,8 @@ import java.util.List;
 class Database implements Serializable {
 	
 	private int flightIdGen = 1;
+	private int aircraftIdGen = 1;
+	private int ticketIdGen = 1;
 	private List<Aircraft> aircrafts;
 	private List<City> cities;
 	private List<Flight> flights;
@@ -51,6 +53,7 @@ class Database implements Serializable {
 	
 	public Aircraft addAircraft(String name, String model, int businessSeats, int economySeats) {
 		aircrafts.add(new Aircraft(name, model, businessSeats, economySeats));
+		aircrafts.get(aircrafts.size() - 1).setId(aircraftIdGen++);
 		return aircrafts.get(aircrafts.size() - 1);
 	}
 	
@@ -71,6 +74,7 @@ class Database implements Serializable {
 			flight.setBusinessPlacesFree(flight.getBusinessPlacesFree() - 1);
 		else
 			flight.setEconomyPlacesFree(flight.getEconomyPlacesFree() - 1);
+		tickets.get(tickets.size() - 1).setId(ticketIdGen++);
 		return tickets.get(tickets.size() - 1);
 	}
 }

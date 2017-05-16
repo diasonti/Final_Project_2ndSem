@@ -5,8 +5,9 @@ import java.io.Serializable;
 /**
  * Created by Vladimir Danilov on 05/05/2017 : 01:44.
  */
-public class Aircraft implements Serializable {
+public class Aircraft extends Data implements Serializable {
 	
+	private int id;
 	private String name, model;
 	private int businessSeats, economySeats;
 	
@@ -17,6 +18,14 @@ public class Aircraft implements Serializable {
 		this.model = model;
 		this.businessSeats = businessSeats;
 		this.economySeats = economySeats;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getName() {
