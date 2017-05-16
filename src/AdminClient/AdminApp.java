@@ -123,6 +123,29 @@ class AdminApp {
 		}
 	}
 	
+	static void newCity(String name, String country, String code){
+		try {
+			Object[] content = new Object[3];
+			content[0] = "newCity";
+			content[1] = name;
+			content[2] = country;
+			content[3] = code;
+			Packet query = new Packet("edit", content);
+			send(query);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	static void newFlight(Aircraft aircraft, City departure, City arrival, int economyPrice, int businessPrice, String date){
+		Flight newOne = new Flight(aircraft, departure, arrival, economyPrice, businessPrice, date);
+		try{
+			send(new Packet("edit", new Object[]{"newFlight", newOne}));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	static void editData(String dataType, Data[] edited){
 		try {
 			Object[] content = new Object[]{dataType, edited};

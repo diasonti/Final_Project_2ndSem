@@ -1,13 +1,16 @@
 package AdminClient;
 
+import common.Aircraft;
+import common.Data;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by Vladimir Danilov on 15/05/2017 : 11:18.
+ * Created by Vladimir Danilov on 16/05/2017 : 18:02.
  */
-public class NewAircraftFrame extends JFrame {
+public class MiniAircraftFrame extends MiniFrame {
 	
 	private JLabel nameLabel, modelLabel, bsLabel, esLabel;
 	private JTextField name, model, businessSeats, economySeats;
@@ -16,11 +19,37 @@ public class NewAircraftFrame extends JFrame {
 	
 	int ready = 0;
 	
-	NewAircraftFrame(){
-		
+	MiniAircraftFrame(){
+		init();
+		submit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				ready = 1;
+				AdminApp.newAircraft(getAircraftsName(), getAircraftsModel(), getAircraftsBS(), getAircraftsES());
+				current.setVisible(false);
+				current.dispose();
+			}
+		});
+	} // New aircraft
+	MiniAircraftFrame(Aircraft edit){
+		init();
+		name.setText(edit.getName());
+		model.setText(edit.getModel());
+		businessSeats.setText("" + edit.getBusinessSeats());
+		economySeats.setText("" + edit.getEconomySeats());
+		submit.addActionListener((ActionEvent ae) -> {
+			ready = 1;
+			Aircraft newone = new Aircraft(name.getText(), model.getText(), Integer.parseInt(businessSeats.getText()), Integer.parseInt(economySeats.getText()));
+			newone.setId(edit.getId());
+			AdminApp.editData("aircraft", new Data[]{newone});
+			current.setVisible(false);
+			current.dispose();
+		});
+	}
+	
+	
+	private void init(){
 		current = this;
-		setUndecorated(true);
-		setLayout(null);
 		setBounds(400,220,450,370);
 		
 		nameLabel = new JLabel("Name:");
@@ -54,16 +83,6 @@ public class NewAircraftFrame extends JFrame {
 				current.dispose();
 			}
 		});
-		submit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				ready = 1;
-				AdminApp.newAircraft(getAircraftsName(), getAircraftsModel(), getAircraftsBS(), getAircraftsES());
-				current.setVisible(false);
-				current.dispose();
-			}
-		});
-		
 		
 		add(nameLabel);
 		add(modelLabel);
@@ -115,5 +134,5 @@ public class NewAircraftFrame extends JFrame {
 		businessSeats.setText("");
 		economySeats.setText("");
 	}
-	
+
 }

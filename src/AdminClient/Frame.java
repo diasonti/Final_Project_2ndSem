@@ -3,7 +3,6 @@ package AdminClient;
 import common.*;
 
 import javax.swing.*;
-import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,7 +17,6 @@ class Frame extends JFrame {
 	private Table aircraftsTable, citiesTable, flightsTable, ticketsTable;
 	private JButton refresh1, refresh2, refresh3, refresh4;
 	private JButton edit1, edit2, edit3, edit4;
-	private JButton save1, save2, save3, save4;
 	private JButton add1, add2, add3, add4;
 	
 	Frame() {
@@ -53,36 +51,22 @@ class Frame extends JFrame {
 		
 		edit1 = new JButton("Edit");
 		edit1.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
+		edit1.setEnabled(false);
 		edit1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				edit1.setVisible(false);
-				save1.setVisible(true);
-				//aircraftsTable.setCellsEditable(true);
+				//TODO
 			}
 		});
 		aircrafts.add(edit1);
 		
-		save1 = new JButton("Save");
-		save1.setVisible(false);
-		save1.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		save1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				save1.setVisible(false);
-				edit1.setVisible(true);
-				//aircraftsTable.setCellsEditable(false);
-				refreshAircraft();
-			}
-		});
-		aircrafts.add(save1);
 		
 		add1 = new JButton("Add");
 		add1.setBounds(horizontalIndent1 + 700, verticalIndent, 250, 60);
 		add1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new NewAircraftFrame();
+				new MiniAircraftFrame();
 			}
 		});
 		aircrafts.add(add1);
@@ -105,6 +89,7 @@ class Frame extends JFrame {
 		
 		edit2 = new JButton("Edit");
 		edit2.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
+		edit2.setEnabled(false);
 		edit2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -113,16 +98,6 @@ class Frame extends JFrame {
 		});
 		cities.add(edit2);
 		
-		save2 = new JButton("Save");
-		save2.setVisible(false);
-		save2.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		save2.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO Table editing, saving changes
-			}
-		});
-		cities.add(save2);
 		
 		add2 = new JButton("Add");
 		add2.setBounds(horizontalIndent1 + 700, verticalIndent, 250, 60);
@@ -152,6 +127,7 @@ class Frame extends JFrame {
 		
 		edit3 = new JButton("Edit");
 		edit3.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
+		edit3.setEnabled(false);
 		edit3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -160,16 +136,6 @@ class Frame extends JFrame {
 		});
 		flights.add(edit3);
 		
-		save3 = new JButton("Save");
-		save3.setVisible(false);
-		save3.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		save3.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO Table editing, saving changes
-			}
-		});
-		flights.add(save3);
 		
 		add3 = new JButton("Add");
 		add3.setBounds(horizontalIndent1 + 700, verticalIndent, 250, 60);
@@ -199,6 +165,7 @@ class Frame extends JFrame {
 		
 		edit4 = new JButton("Edit");
 		edit4.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
+		edit4.setEnabled(false);
 		edit4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -207,26 +174,16 @@ class Frame extends JFrame {
 		});
 		tickets.add(edit4);
 		
-		save4 = new JButton("Save");
-		save4.setVisible(false);
-		save4.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		save4.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO Table editing, saving changes
-			}
-		});
-		tickets.add(save4);
 		
 		add4 = new JButton("Add");
 		add4.setBounds(horizontalIndent1 + 700, verticalIndent, 250, 60);
 		add4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO add new ticket
+			
 			}
 		});
-		tickets.add(add4);
+		//tickets.add(add4); //FIXME
 		
 		
 		tabs.addTab("Aircraft", aircrafts);
@@ -236,7 +193,14 @@ class Frame extends JFrame {
 		
 		add(tabs);
 		setVisible(true);
+		
+		refreshAircraft();
+		refreshCities();
+		refreshFlights();
+		refreshTickets();
 	}
+	
+	
 	
 	private void refreshAircraft() {
 		Aircraft[] aircraftList = AdminApp.getAllAircraft();
@@ -251,23 +215,6 @@ class Frame extends JFrame {
 		aircraftsTable.setData(tableData);
 	}
 	
-	private void refreshFlights() {
-		Flight[] allFlightsList = AdminApp.getAllFlights();
-		Object[][] tableData = new Object[allFlightsList.length][8];
-		for(int i = 0; i < allFlightsList.length; i++) {
-			tableData[i][0] = allFlightsList[i].getDate();
-			tableData[i][1] = allFlightsList[i].getDeparture();
-			tableData[i][2] = allFlightsList[i].getArrival();
-			tableData[i][3] = allFlightsList[i].getAircraft();
-			tableData[i][4] = allFlightsList[i].getBusinessPrice();
-			tableData[i][5] = allFlightsList[i].getEconomyPrice();
-			tableData[i][6] = allFlightsList[i].getBusinessPlacesFree();
-			tableData[i][7] = allFlightsList[i].getEconomyPlacesFree();
-		}
-		flightsTable.setItems(allFlightsList);
-		flightsTable.setData(tableData);
-	}
-	
 	private void refreshCities() {
 		City[] list = AdminApp.getAllCities();
 		Object[][] tableData = new Object[list.length][8];
@@ -276,8 +223,26 @@ class Frame extends JFrame {
 			tableData[i][1] = list[i].getCountry();
 			tableData[i][2] = list[i].getCode();
 		}
-		aircraftsTable.setItems(list);
-		aircraftsTable.setData(tableData);
+		citiesTable.setItems(list);
+		citiesTable.setData(tableData);
+	}
+	
+	private void refreshFlights() {
+		Flight[] allFlightsList = AdminApp.getAllFlights();
+		Object[][] tableData = new Object[allFlightsList.length][9];
+		for(int i = 0; i < allFlightsList.length; i++) {
+			tableData[i][0] = allFlightsList[i].getId();
+			tableData[i][1] = allFlightsList[i].getDate();
+			tableData[i][2] = allFlightsList[i].getDeparture().toString();
+			tableData[i][3] = allFlightsList[i].getArrival().toString();
+			tableData[i][4] = allFlightsList[i].getAircraft().toString();
+			tableData[i][5] = allFlightsList[i].getBusinessPrice();
+			tableData[i][6] = allFlightsList[i].getEconomyPrice();
+			tableData[i][7] = allFlightsList[i].getBusinessPlacesFree();
+			tableData[i][8] = allFlightsList[i].getEconomyPlacesFree();
+		}
+		flightsTable.setItems(allFlightsList);
+		flightsTable.setData(tableData);
 	}
 	
 	private void refreshTickets() {
@@ -290,16 +255,19 @@ class Frame extends JFrame {
 			tableData[i][3] = list[i].getClassToString();
 			tableData[i][4] = list[i].getFlight();
 		}
-		aircraftsTable.setItems(list);
-		aircraftsTable.setData(tableData);
+		ticketsTable.setItems(list);
+		ticketsTable.setData(tableData);
 	}
+	
+	
+	
+	
 	
 	private class Tab extends JPanel {
 		Tab() {
 			setLayout(null);
 		}
 	}
-	
 	private class Table extends JScrollPane {
 		private JTable table;
 		private String[] header;
@@ -332,7 +300,8 @@ class Frame extends JFrame {
 		}
 		
 		private void init() {
-			table.setRowHeight(30);
+			table.setRowHeight(40);
+			table.getTableHeader().setReorderingAllowed(false);
 		}
 		
 		public String[] getHeader() {
@@ -347,6 +316,7 @@ class Frame extends JFrame {
 					return cellsEditable;
 				}
 			};
+			init();
 			setViewportView(table);
 		}
 		
@@ -362,6 +332,7 @@ class Frame extends JFrame {
 					return cellsEditable;
 				}
 			};
+			init();
 			setViewportView(table);
 		}
 		
@@ -381,6 +352,7 @@ class Frame extends JFrame {
 					return cellsEditable;
 				}
 			};
+			init();
 			setViewportView(table);
 		}
 		

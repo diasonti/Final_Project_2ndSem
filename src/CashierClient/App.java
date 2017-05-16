@@ -52,7 +52,10 @@ class App {
 			Object[] content = {from, to, business, passengers}; // Flights finding packet
 			Packet query = new Packet("FilteredFlightsListRequest", content);
 			Packet response = send(query);
-			Flight[] flights = (Flight[]) response.getContent();
+			Flight[] flights = new Flight[response.getContent().length];
+			for(int i = 0; i < response.getContent().length; i++){
+				flights[i] = (Flight)response.getContent()[i];
+			}
 			return flights;
 		} catch(Exception e) {
 			e.printStackTrace();

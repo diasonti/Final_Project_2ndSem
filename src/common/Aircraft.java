@@ -64,4 +64,16 @@ public class Aircraft extends Data implements Serializable {
 	public String toString() {
 		return name + " " + model;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Aircraft)) return false;
+		Aircraft o = (Aircraft) obj;
+		if(o.getId() != id) return false;
+		if(!o.getName().equals(name)) return false;
+		if(!o.getModel().equals(model)) return false;
+		if(o.getEconomySeats() != economySeats) return false;
+		if(o.getBusinessSeats() != businessSeats) return false;
+		return true;
+	}
 }

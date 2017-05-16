@@ -17,7 +17,7 @@ public class Flight extends Data implements Serializable {
 	
 	public Flight() {}
 	
-	public Flight(Aircraft aircraft, City departure, City arrival, int distance, int economyPrice, int businessPrice, String date) {
+	public Flight(Aircraft aircraft, City departure, City arrival, int economyPrice, int businessPrice, String date) {
 		this.aircraft = aircraft;
 		this.departure = departure;
 		this.arrival = arrival;
@@ -104,4 +104,5 @@ public class Flight extends Data implements Serializable {
 	public String toString() {
 		return departure.getCode() + " - " + arrival.getCode() + " : " + date;
 	}
+	
 }

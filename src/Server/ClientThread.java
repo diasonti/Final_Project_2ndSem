@@ -81,7 +81,12 @@ class ClientThread extends Thread {
 			util = new AdminAccess(in, out);
 		}
 		while(true){
-			util.grantAccess();
+			try {
+				util.grantAccess();
+			}catch(Exception e){
+				System.out.println("Client disconnected");
+				break;
+			}
 		}
 	}
 	

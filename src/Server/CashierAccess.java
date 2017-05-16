@@ -17,19 +17,16 @@ class CashierAccess extends Access {
 	}
 	
 	@Override
-	void grantAccess(){
-		try {
-			Packet query = get();
-			if(filteredFlightsList(query)){}
-			else if(flightsList(query)){}
-			else if(book(query)){}
-			else if(citiesList(query)){}
-		}catch(Exception e){
-			e.printStackTrace();
+	void grantAccess() throws Exception {
+		Packet query = get();
+		if(filteredFlightsList(query)) {
+		} else if(flightsList(query)) {
+		} else if(book(query)) {
+		} else if(citiesList(query)) {
 		}
 	}
 	
-	protected boolean filteredFlightsList(Packet query){
+	protected boolean filteredFlightsList(Packet query) {
 		if(query.getHeader().equals("FilteredFlightsListRequest")) {
 			//{from(City), to(City), business(boolean), passengers(int)}
 			
@@ -68,11 +65,12 @@ class CashierAccess extends Access {
 								new City("London Heathrow", "United Kingdom", "EGLL"),
 								5000, 1000, 3000, "2.12.1998")}));
 				*/
-		}else{
+		} else {
 			return false;
 		}
 	}
-	protected boolean flightsList(Packet query){
+	
+	protected boolean flightsList(Packet query) {
 		if(query.getHeader().equals("FlightsListRequest")) {
 			load();
 			send(new Packet(db.getFlights().toArray()));
@@ -91,11 +89,12 @@ class CashierAccess extends Access {
 								new City("London Heathrow", "United Kingdom", "EGLL"),
 								5000, 1000, 3000, "2.12.1998")}));
 				*/
-		}else{
+		} else {
 			return false;
 		}
 	}
-	protected boolean book(Packet query){
+	
+	protected boolean book(Packet query) {
 		if(query.getHeader().equals("BookRequest")) {
 			//(name[String], surname[String], pass[String], selectedFlight(int id), businessClass(boolean))
 			load();
@@ -125,11 +124,12 @@ class CashierAccess extends Access {
 			save();
 			respond(0);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-	protected boolean citiesList(Packet query){
+	
+	protected boolean citiesList(Packet query) {
 		if(query.getHeader().equals("CitiesListRequest")) {
 			load();
 			send(new Packet(db.getCities().toArray()));
@@ -139,7 +139,7 @@ class CashierAccess extends Access {
 						new City("Astana", "Kazakhstan", "UACC"),
 						new City("London Heathrow", "United Kingdom", "EGLL")}));
 				*/
-		}else{
+		} else {
 			return false;
 		}
 	}

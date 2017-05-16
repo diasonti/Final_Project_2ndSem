@@ -21,7 +21,7 @@ abstract class Access {
 		this.out = outputStream;
 	}
 	
-	abstract void grantAccess();
+	abstract void grantAccess() throws Exception;
 	
 	protected void save() {
 		try {

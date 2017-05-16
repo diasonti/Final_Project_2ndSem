@@ -14,20 +14,20 @@ class Database implements Serializable {
 	private int flightIdGen = 1;
 	private int aircraftIdGen = 1;
 	private int ticketIdGen = 1;
-	private List<Aircraft> aircrafts;
+	private List<Aircraft> aircraft;
 	private List<City> cities;
 	private List<Flight> flights;
 	private List<Ticket> tickets;
 	
 	Database() {
-		aircrafts = new ArrayList<>();
+		aircraft = new ArrayList<>();
 		cities = new ArrayList<>();
 		flights = new ArrayList<>();
 		tickets = new ArrayList<>();
 	}
 	
-	public List<Aircraft> getAircrafts() {
-		return aircrafts;
+	public List<Aircraft> getAircraft() {
+		return aircraft;
 	}
 	
 	public List<City> getCities() {
@@ -52,9 +52,9 @@ class Database implements Serializable {
 	}
 	
 	public Aircraft addAircraft(String name, String model, int businessSeats, int economySeats) {
-		aircrafts.add(new Aircraft(name, model, businessSeats, economySeats));
-		aircrafts.get(aircrafts.size() - 1).setId(aircraftIdGen++);
-		return aircrafts.get(aircrafts.size() - 1);
+		aircraft.add(new Aircraft(name, model, businessSeats, economySeats));
+		aircraft.get(aircraft.size() - 1).setId(aircraftIdGen++);
+		return aircraft.get(aircraft.size() - 1);
 	}
 	
 	public City addCity(String name, String country, String code) {
@@ -63,7 +63,7 @@ class Database implements Serializable {
 	}
 	
 	public Flight addFlight(City from, City to, int distance, Aircraft aircraft, int economyPrice, int businessPrice, String date) {
-		flights.add(new Flight(aircraft, from, to, distance, economyPrice, businessPrice, date));
+		flights.add(new Flight(aircraft, from, to, economyPrice, businessPrice, date));
 		flights.get(flights.size() - 1).setId(flightIdGen++);
 		return flights.get(flights.size() - 1);
 	}
@@ -76,5 +76,34 @@ class Database implements Serializable {
 			flight.setEconomyPlacesFree(flight.getEconomyPlacesFree() - 1);
 		tickets.get(tickets.size() - 1).setId(ticketIdGen++);
 		return tickets.get(tickets.size() - 1);
+	}
+	
+	public Data find(Data key){
+		if(key instanceof Aircraft){
+			Aircraft k = (Aircraft) key;
+			for(Aircraft a : aircraft){
+				if(a.equals(k))
+					return a;
+			}
+		}else if(key instanceof City){
+			City k = (City) key;
+			for(City c : cities){
+				if(c.equals(k))
+					return c;
+			}
+		}else if(key instanceof Flight){
+			Flight k = (Flight) key;
+			for(Flight c : flights){
+				if(c.getId() == k.getId())
+					return c;
+			}
+		}else if(key instanceof Ticket){
+			Ticket k = (Ticket) key;
+			for(Ticket c : tickets){
+				if(c.getId() == k.getId())
+					return c;
+			}
+		}
+		return null;
 	}
 }

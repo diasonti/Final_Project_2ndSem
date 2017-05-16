@@ -66,4 +66,9 @@ public class Ticket extends Data implements Serializable {
 	public String getClassToString(){
 		return business ? "Business" : "Economy";
 	}
+	
+	@Override
+	public String toString() {
+		return name + " " + surname + " " + passportNo + " " + flight;
+	}
 }
