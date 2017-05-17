@@ -51,11 +51,13 @@ class Frame extends JFrame {
 		
 		edit1 = new JButton("Edit");
 		edit1.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		edit1.setEnabled(false);
+		//edit1.setEnabled(false);
 		edit1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO
+				if(aircraftsTable.getSelectedObject() != null){
+					new MiniAircraftFrame((Aircraft) aircraftsTable.getSelectedObject());
+				}
 			}
 		});
 		aircrafts.add(edit1);
@@ -89,11 +91,13 @@ class Frame extends JFrame {
 		
 		edit2 = new JButton("Edit");
 		edit2.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		edit2.setEnabled(false);
+		//edit2.setEnabled(false);
 		edit2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Table editing, saving changes
+				if(citiesTable.getSelectedObject() != null) {
+					new MiniCityFrame((City) citiesTable.getSelectedObject());
+				}
 			}
 		});
 		cities.add(edit2);
@@ -104,7 +108,7 @@ class Frame extends JFrame {
 		add2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Add new city
+				new MiniCityFrame();
 			}
 		});
 		cities.add(add2);
@@ -127,11 +131,13 @@ class Frame extends JFrame {
 		
 		edit3 = new JButton("Edit");
 		edit3.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		edit3.setEnabled(false);
+		//edit3.setEnabled(false);
 		edit3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Table editing, saving changes
+				if(flightsTable.getSelectedObject() != null) {
+					new MiniFlightFrame((Flight) flightsTable.getSelectedObject());
+				}
 			}
 		});
 		flights.add(edit3);
@@ -142,7 +148,7 @@ class Frame extends JFrame {
 		add3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Add new flight
+				new MiniFlightFrame();
 			}
 		});
 		flights.add(add3);
@@ -165,25 +171,16 @@ class Frame extends JFrame {
 		
 		edit4 = new JButton("Edit");
 		edit4.setBounds(horizontalIndent1 + 350, verticalIndent, 250, 60);
-		edit4.setEnabled(false);
+		//edit4.setEnabled(false);
 		edit4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Edit table, save changes
+				if(ticketsTable.getSelectedObject() != null) {
+					new MiniTicketFrame((Ticket) ticketsTable.getSelectedObject());
+				}
 			}
 		});
 		tickets.add(edit4);
-		
-		
-		add4 = new JButton("Add");
-		add4.setBounds(horizontalIndent1 + 700, verticalIndent, 250, 60);
-		add4.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			
-			}
-		});
-		//tickets.add(add4); //FIXME
 		
 		
 		tabs.addTab("Aircraft", aircrafts);
@@ -354,6 +351,11 @@ class Frame extends JFrame {
 			};
 			init();
 			setViewportView(table);
+		}
+		
+		public Data getSelectedObject(){
+			if(table.getSelectedRow() == -1) return null;
+			return items[table.getSelectedRow()];
 		}
 		
 	}

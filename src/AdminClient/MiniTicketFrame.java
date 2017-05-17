@@ -12,11 +12,11 @@ import java.awt.event.ActionListener;
  */
 public class MiniTicketFrame extends MiniFrame {
 	
-	private JLabel nameLabel, surnamelLabel, passLabel, esLabel;
+	private JLabel nameLabel, surnamelLabel, passLabel;
 	private JTextField name;
 	private JTextField surname;
 	private JTextField pass;
-	private JButton back, submit;
+	private JButton back, submit, delete;
 	private JFrame current;
 	
 	int ready = 0;
@@ -34,6 +34,12 @@ public class MiniTicketFrame extends MiniFrame {
 			current.setVisible(false);
 			current.dispose();
 		});
+		delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			
+			}
+		});
 	}
 	
 	
@@ -42,26 +48,24 @@ public class MiniTicketFrame extends MiniFrame {
 		setBounds(400,220,450,370);
 		
 		nameLabel = new JLabel("Name:");
-		surnamelLabel = new JLabel("Model:");
-		passLabel = new JLabel("Business Seats:");
-		esLabel = new JLabel("Economy Seats:");
+		surnamelLabel = new JLabel("Surname:");
+		passLabel = new JLabel("PassportNo:");
 		nameLabel.setBounds(15, 30, 100, 20);
 		surnamelLabel.setBounds(15, 95, 100, 20);
 		passLabel.setBounds(15, 160,100,20);
-		esLabel.setBounds(15, 225,100,20);
 		
 		name = new JTextField();
 		surname = new JTextField();
 		pass = new JTextField();
-		economySeats = new JTextField();
 		name.setBounds(105, nameLabel.getY() - 12,315,45);
 		surname.setBounds(105, surnamelLabel.getY() - 12,315,45);
 		pass.setBounds(105, passLabel.getY() - 12,315,45);
-		economySeats.setBounds(105, esLabel.getY() - 12,315,45);
 		
 		back = new JButton("Back");
 		submit = new JButton("Submit");
+		delete = new JButton("X");
 		back.setBounds(20,290,150,50);
+		delete.setBounds(195, 290, 50, 50);
 		submit.setBounds(270,290,150,50);
 		
 		back.addActionListener(new ActionListener() {
@@ -76,12 +80,11 @@ public class MiniTicketFrame extends MiniFrame {
 		add(nameLabel);
 		add(surnamelLabel);
 		add(passLabel);
-		add(esLabel);
 		add(name);
 		add(surname);
 		add(pass);
-		add(economySeats);
 		add(back);
+		add(delete);
 		add(submit);
 		
 		setVisible(true);

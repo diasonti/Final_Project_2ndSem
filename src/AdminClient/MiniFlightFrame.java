@@ -40,19 +40,19 @@ public class MiniFlightFrame extends MiniFrame {
 	} // New Flight
 	MiniFlightFrame(Flight edit){
 		init();
-		for(int i = 0; i < from.getItemCount(); i++){
+		for(int i = 1; i < from.getItemCount(); i++){
 			if(from.getItemAt(i).equals(edit.getDeparture())){
 				from.setSelectedIndex(i);
 				break;
 			}
 		}
-		for(int i = 0; i < to.getItemCount(); i++){
+		for(int i = 1; i < to.getItemCount(); i++){
 			if(to.getItemAt(i).equals(edit.getArrival())){
 				to.setSelectedIndex(i);
 				break;
 			}
 		}
-		for(int i = 0; i < aircraft.getItemCount(); i++){
+		for(int i = 1; i < aircraft.getItemCount(); i++){
 			if(aircraft.getItemAt(i).equals(edit.getAircraft())){
 				aircraft.setSelectedIndex(i);
 				break;
@@ -117,6 +117,11 @@ public class MiniFlightFrame extends MiniFrame {
 		from.setAction(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(from.getSelectedIndex() == 0){
+					submit.setEnabled(false);
+				}else{
+					submit.setEnabled(true);
+				}
 				if(to.getSelectedIndex() == from.getSelectedIndex()){
 					to.setSelectedItem(null);
 				}
@@ -125,6 +130,11 @@ public class MiniFlightFrame extends MiniFrame {
 		to.setAction(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(to.getSelectedIndex() == 0){
+					submit.setEnabled(false);
+				}else{
+					submit.setEnabled(true);
+				}
 				if(to.getSelectedIndex() == from.getSelectedIndex()){
 					from.setSelectedItem(null);
 				}
