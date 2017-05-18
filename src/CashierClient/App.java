@@ -65,7 +65,14 @@ class App {
 	
 	static int buyTickets(String[] name, String[] surname, String[] PassNo, Flight flight, boolean business) {
 		try {
-			Object[] content = {flight.getId(), name, surname, PassNo, business}; // Flights booking packet
+			Object[] content = new Object[name.length * 3 + 2];
+			content[0] = flight.getId();
+			content[1] = business;
+			for(int i = 0, j = 2; i < name.length; i++, j = j + 3){
+				content[j] = name[i];
+				content[j + 1] = surname[i];
+				content[j + 2] = PassNo[i];
+			}
 			Packet query = new Packet("BookRequest", content);
 			Packet response = send(query);
 			return (int) response.getContent()[0];

@@ -57,6 +57,7 @@ class Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(aircraftsTable.getSelectedObject() != null){
 					new MiniAircraftFrame((Aircraft) aircraftsTable.getSelectedObject());
+					refreshAircraft();
 				}
 			}
 		});
@@ -69,6 +70,7 @@ class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new MiniAircraftFrame();
+				refreshAircraft();
 			}
 		});
 		aircrafts.add(add1);
@@ -97,6 +99,7 @@ class Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(citiesTable.getSelectedObject() != null) {
 					new MiniCityFrame((City) citiesTable.getSelectedObject());
+					refreshCities();
 				}
 			}
 		});
@@ -109,13 +112,14 @@ class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new MiniCityFrame();
+				refreshCities();
 			}
 		});
 		cities.add(add2);
 		
 		
 		flights = new Tab();
-		flightsTable = new Table(new Object[0][0], new String[]{"ID", "Date", "From", "To", "Aircraft", "Economy Price", "Business Price", "Economy Free", "Business Free"});
+		flightsTable = new Table(new Object[0][0], new String[]{"ID", "Date", "From", "To", "Aircraft", "Business Price", "Economy Price", "Business Free", "Economy Free"});
 		flightsTable.setBounds(0, 0, getWidth(), getHeight() - 130);
 		flights.add(flightsTable);
 		
@@ -137,6 +141,7 @@ class Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(flightsTable.getSelectedObject() != null) {
 					new MiniFlightFrame((Flight) flightsTable.getSelectedObject());
+					refreshFlights();
 				}
 			}
 		});
@@ -149,6 +154,7 @@ class Frame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new MiniFlightFrame();
+				refreshFlights();
 			}
 		});
 		flights.add(add3);
@@ -177,6 +183,7 @@ class Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(ticketsTable.getSelectedObject() != null) {
 					new MiniTicketFrame((Ticket) ticketsTable.getSelectedObject());
+					refreshTickets();
 				}
 			}
 		});

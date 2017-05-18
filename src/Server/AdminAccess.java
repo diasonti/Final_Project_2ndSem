@@ -54,7 +54,7 @@ class AdminAccess extends CashierAccess {
 			if(query.getContent()[0].equals("newAircraft")) {
 				db.addAircraft((String) query.getContent()[1], (String) query.getContent()[2], (int) query.getContent()[3], (int) query.getContent()[4]);
 			} else if(query.getContent()[0].equals("aircraft")) {
-				Aircraft edited = (Aircraft) query.getContent()[0];
+				Aircraft edited = (Aircraft) query.getContent()[1];
 				for(Aircraft a : db.getAircraft()) {
 					if(a.getId() == edited.getId()) {
 						a.setName(edited.getName());
@@ -67,10 +67,10 @@ class AdminAccess extends CashierAccess {
 			} else if(query.getContent()[0].equals("newCity")) {
 				db.addCity((String) query.getContent()[1], (String) query.getContent()[2], (String) query.getContent()[3]);
 			} else if(query.getContent()[0].equals("city")) {
-				City compare = (City) query.getContent()[0];
+				City compare = (City) query.getContent()[1];
 				for(City c : db.getCities()) {
 					if(c.equals(compare)) {
-						City updated = (City) query.getContent()[1];
+						City updated = (City) query.getContent()[2];
 						c.setName(updated.getName());
 						c.setCountry(updated.getCountry());
 						c.setCode(updated.getCode());
@@ -121,9 +121,35 @@ class AdminAccess extends CashierAccess {
 				toEdit.setDate(updated.getDate());
 				toEdit.setEconomyPrice(updated.getEconomyPrice());
 				toEdit.setBusinessPrice(updated.getBusinessPrice());
+			}else if(query.getContent()[0].equals("ticket")) {
+				Ticket updated = (Ticket)query.getContent()[1];
+				Ticket toEdit = null;
+				for(Ticket f : db.getTickets()){
+					if(f.getId() == updated.getId()){
+						toEdit = f;
+						break;
+					}
+				}
+				toEdit.setName(updated.getName());
+				toEdit.setSurname(updated.getSurname());
+				toEdit.setPassportNo(updated.getPassportNo());
 			}
-			//TODO Data edit
-			
+			else if(query.getContent()[0].equals("deleteTicket")) {
+				Ticket compare = (Ticket)query.getContent()[1];
+				Ticket toEdit = null;
+				for(Ticket f : db.getTickets()){
+					if(f.getId() == compare.getId()){
+						db.getTickets().remove(f);
+						Flight del = db.getFlightById(compare.getFlight().getId());
+						if(compare.getClassToString().equals("Business")) {
+							del.setBusinessPlacesFree(del.getBusinessPlacesFree() + 1);
+						}else {
+							del.setEconomyPlacesFree(del.getEconomyPlacesFree() + 1);
+						}
+						break;
+					}
+				}
+			}
 			save();
 			respond(0);
 			return true;

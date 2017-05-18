@@ -26,13 +26,13 @@ class Frame extends JFrame {
     private JTextField who;
     private JScrollPane foundTableContainer;
     private JTable flights;
-	private String[] foundFlightsHeader = {"Aircraft", "Business price", "Economy price"};
+	private String[] foundFlightsHeader = {"Date", "Aircraft", "Business price", "Economy price"};
 	private Flight[] foundFlights = new Flight[0];
 	private Object[][] foundFlightsTableData = new Object[0][0];
     private JButton book, find, reset;
 	
-	private Flight selectedFlight;
-    private boolean businessClass;
+	static Flight selectedFlight;
+    static boolean businessClass;
     private int number;
 	
     private String[] allFlightsHeader = {"Date", "From", "To", "Aircraft", "Business Price", "Economy Price", "Business available", "Economy available"};
@@ -163,11 +163,12 @@ class Frame extends JFrame {
 						int passengers = Integer.parseInt(who.getText());
 						foundFlights = App.findFlights((City)from.getSelectedItem(), (City)to.getSelectedItem(), business.isSelected(), passengers);
 						
-						foundFlightsTableData = new Object[foundFlights.length][3];
+						foundFlightsTableData = new Object[foundFlights.length][4];
 						for(int i = 0; i < foundFlights.length; i++){
-							foundFlightsTableData[i][0] = foundFlights[i].getAircraft();
-							foundFlightsTableData[i][1] = foundFlights[i].getBusinessPrice();
-							foundFlightsTableData[i][2] = foundFlights[i].getEconomyPrice();
+							foundFlightsTableData[i][0] = foundFlights[i].getDate();
+							foundFlightsTableData[i][1] = foundFlights[i].getAircraft();
+							foundFlightsTableData[i][2] = foundFlights[i].getBusinessPrice();
+							foundFlightsTableData[i][3] = foundFlights[i].getEconomyPrice();
 						}
 						flights = new JTable(foundFlightsTableData, foundFlightsHeader){
 							@Override
@@ -199,33 +200,7 @@ class Frame extends JFrame {
 		book.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int response = 1;
-				String[] name = new String[number];
-				String[] surname = new String[number];
-				String[] pass = new String[number];
-				PassengerDataFrame dataInput = new PassengerDataFrame();
-				for(int i = 0; i < number; i++){
-					dataInput.setCount(i + 1);
-					while(true){
-						if(dataInput.ready == -1){
-							break;
-						}else if(dataInput.ready == 1){
-							name[i] = dataInput.getPassengersName();
-							surname[i] = dataInput.getPassengersSurname();
-							pass[i] = dataInput.getPassengersPassNo();
-							dataInput.reset();
-						}
-					}
-				}
-				if(dataInput.ready == 0) {
-					response = App.buyTickets(name, surname, pass, selectedFlight, businessClass);
-				}
-				if(response == 0){
-					JOptionPane.showMessageDialog(App.frame, "Success");
-					resetFields();
-				}else{
-					JOptionPane.showMessageDialog(App.frame, "Error. Code:" + response);
-				}
+				new PassengerDataFrame(number);
 			}
 		});
         

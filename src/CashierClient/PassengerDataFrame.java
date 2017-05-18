@@ -1,8 +1,12 @@
 package CashierClient;
 
+import common.Packet;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vladimir Danilov on 10/05/2017 : 00:26.
@@ -12,19 +16,25 @@ class PassengerDataFrame extends JFrame {
 	private JLabel nameLabel, surnameLabel, passLabel, number;
 	private JTextField name, surname, pass;
 	private JButton back, submit;
-	private JFrame current;
-	
+	private PassengerDataFrame current;
+	private int ticketNo;
+	private int tickets;
+	private List<String> names, surnames, passes;
 	int ready = 0;
 	
-	PassengerDataFrame(){
-	
+	PassengerDataFrame(int amount){
+		ticketNo = 1;
+		tickets = amount;
+			names = new ArrayList<String>();
+			surnames = new ArrayList<String>();
+			passes = new ArrayList<String>();
 		current = this;
 		setUndecorated(true);
 		setLayout(null);
 		//setSize(450, 300);
 		setBounds(500,500,450,300);
 		
-		number = new JLabel("Passenger ");
+		number = new JLabel("Passenger " + ticketNo);
 		nameLabel = new JLabel("First name:");
 		surnameLabel = new JLabel("Last name:");
 		passLabel = new JLabel("Passport No:");
@@ -56,6 +66,32 @@ class PassengerDataFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				ready = 1;
+				current.getNames().add(name.getText());
+				current.getSurnames().add(surname.getText());
+				current.getPasses().add(pass.getText());
+				if(ticketNo < tickets){
+					setCount(ticketNo + 1);
+					reset();
+				}else{
+					String[] names, surnames, passes;
+					names = new String[tickets];
+					surnames = new String[tickets];
+					passes = new String[tickets];
+					for(int i = 0; i < tickets; i++){
+						names[i] = current.getNames().get(i);
+						surnames[i] = current.getSurnames().get(i);
+						passes[i] = current.getPasses().get(i);
+					}
+					int response = App.buyTickets(names, surnames, passes, Frame.selectedFlight, Frame.businessClass);
+					if(response == 0){
+						JOptionPane.showMessageDialog(App.frame, "Success");
+					}else{
+						JOptionPane.showMessageDialog(App.frame, "Error. Code:" + response);
+						return;
+					}
+					current.setVisible(false);
+					current.dispose();
+				}
 			}
 		});
 		
@@ -84,7 +120,20 @@ class PassengerDataFrame extends JFrame {
 	}
 	
 	void setCount(int n){
-		number.setText("Passenger " + n);
+		ticketNo = n;
+		number.setText("Passenger " + ticketNo);
+	}
+	
+	public List<String> getNames() {
+		return names;
+	}
+	
+	public List<String> getSurnames() {
+		return surnames;
+	}
+	
+	public List<String> getPasses() {
+		return passes;
 	}
 	
 	void reset(){

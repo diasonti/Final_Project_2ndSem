@@ -30,14 +30,16 @@ public class MiniTicketFrame extends MiniFrame {
 			ready = 1;
 			Ticket newone = new Ticket(name.getText(), surname.getText(), pass.getText(), edit.getClassToString().equals("business"), edit.getFlight());
 			newone.setId(edit.getId());
-			AdminApp.editData("ticket", new Data[]{edit, newone});
+			AdminApp.editData("ticket", new Data[]{newone});
 			current.setVisible(false);
 			current.dispose();
 		});
 		delete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
+				AdminApp.editData("deleteTicket", new Data[]{edit});
+				current.setVisible(false);
+				current.dispose();
 			}
 		});
 	}

@@ -84,6 +84,7 @@ class ClientThread extends Thread {
 			try {
 				util.grantAccess();
 			}catch(Exception e){
+				e.printStackTrace();
 				System.out.println("Client disconnected");
 				break;
 			}

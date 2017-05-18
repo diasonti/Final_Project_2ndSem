@@ -97,12 +97,21 @@ class CashierAccess extends Access {
 	protected boolean book(Packet query) {
 		if(query.getHeader().equals("BookRequest")) {
 			//(name[String], surname[String], pass[String], selectedFlight(int id), businessClass(boolean))
+			//(flight, business, name, surname, pass, name, surname, pass, ...)
 			load();
-			String[] name = (String[]) query.getContent()[0];
-			String[] surname = (String[]) query.getContent()[1];
-			String[] pass = (String[]) query.getContent()[2];
-			Flight flight = db.getFlightById((int) query.getContent()[3]);
-			boolean business = (boolean) query.getContent()[4];
+			int passCount = query.getContent().length - 2;
+			passCount /= 3;
+			String[] name, surname, pass;
+			name = new String[passCount];
+			surname = new String[passCount];
+			pass = new String[passCount];
+			for(int i = 2, j = 0; i < query.getContent().length; i = i + 3, j++){
+				name[j] = (String)query.getContent()[i];
+				surname[j] = (String)query.getContent()[i + 1];
+				pass[j] = (String)query.getContent()[i + 2];
+			}
+			Flight flight = db.getFlightById((int) query.getContent()[0]);
+			boolean business = (boolean) query.getContent()[1];
 			if(flight == null) {
 				respond(404);
 				return true;
