@@ -1,5 +1,7 @@
 ## Airline Tickets Booking System
 
+> Final project for 2nd semester's Java SE class.
+
 A GUI based client-server application for airplane tickets booking.
 
 **Applications:**
